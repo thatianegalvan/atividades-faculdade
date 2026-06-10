@@ -1,7 +1,7 @@
 name: jobs examples
 
 on:
-  push
+  workflow_dispatch:
 
 jobs:
   build:
@@ -26,4 +26,4 @@ jobs:
 
       - name: use of artifact created
         run: ls build-result.txt
-
+``
