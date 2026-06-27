@@ -1,0 +1,56 @@
+schema: spec-driven
+context: |
+  Você está trabalhando no monorepo e-micro-commerce (DevAI), focado em controle de pedidos e pagamentos para microempreendedores.
+
+  Stack Tecnológica:
+  - Frontend: Next.js 16+ (TypeScript, App Router, Vanilla CSS, Server Actions apenas como camada de transporte).
+  - Backend: NestJS 11+ (TypeScript, Node.js 24+, Prisma 7+, PostgreSQL 15+).
+  - Identidade: Clerk.
+  - Observabilidade: OpenTelemetry, Grafana Cloud.
+
+  Estrutura do Monorepo:
+  - apps/frontend/ (Código do frontend web)
+  - apps/backend/ (Código do backend NestJS)
+  - infra/ (Infraestrutura e Terraform)
+  - docs/ (Documentação do projeto)
+
+  Diretrizes Arquiteturais:
+  1. Backend como Fonte Única de Verdade: Toda regra de negócio deve residir exclusivamente no backend NestJS.
+  2. BFF (Backend for Frontend): É proibido acesso direto ao PostgreSQL, Prisma ou Supabase pelo frontend. Toda comunicação de negócio deve ocorrer através das APIs do backend NestJS.
+  3. APIs: RESTful, payloads JSON, Base URL `https://api.dominio.com/v1`, versionamento obrigatório na URI.
+  4. Tratamento de Erros: Erros expostos pela API devem seguir estritamente o formato RFC 9457 Problem Details.
+  5. Auditoria: Operações CUD (Create, Update, Delete) em entidades críticas devem registrar obrigatoriamente usuário e objeto.
+  6. Rate Limiting: Limite de 100 requisições/min por IP e 1000/min por usuário autenticado.
+  7. Portabilidade: Proibido o uso de recursos específicos de fornecedores SaaS de banco de dados.
+
+  Identidade Visual (Sistema de Design Nike):
+  - Cores: Principal é Nike Black (`#111111`), Fundo é White (`#ffffff`), Superfícies secundárias são Soft Cloud (`#f5f5f5`).
+  - Geometria: Formatos arredondados/pílulas (Pill geometry) para CTAs, inputs de busca, tags e chips de filtro.
+  - Cartões de Produto: Borda quadrada (zero radius), sem sombras. O destaque deve ser a fotografia do produto.
+  - Tipografia: Display-campaign em Futura (96px, uppercase). Outros elementos em Helvetica Now.
+
+rules:
+  proposal:
+    - "Indicar claramente o impacto da alteração proposta tanto no frontend quanto no backend."
+    - "Identificar a necessidade de novas migrações de banco de dados, variáveis de ambiente ou configurações de permissão no Clerk."
+    - "Validar se a proposta está em conformidade com o padrão BFF (sem acesso direto ao banco ou Prisma pelo frontend)."
+  specs:
+    - "Definir requisitos em conformidade com RF-01 (Vitrine de Produtos) e RF-02 (Criação e Acompanhamento de Pedidos)."
+    - "Respeitar estritamente os estados de pedido: Novo -> Pago -> Preparação -> Faturado -> Despachado -> Entregue."
+    - "Definir regras de validação de dados de entrada e comportamento para respostas de erro RFC 9457."
+  design:
+    - "Garantir o uso de cores do sistema de design Nike (Nike Black, Soft Cloud, White) e tipografia Futura/Helvetica."
+    - "Validar o formato arredondado (pílula) em botões, campos de busca e filtros."
+    - "Garantir que os cartões de produtos não possuam arredondamento ou sombras decorativas."
+  tasks:
+    - "Incluir tarefas de implementação NestJS no backend (módulos, controladores, serviços, validação)."
+    - "Incluir tarefas de migração e atualização de esquemas do Prisma se houver alteração de persistência."
+    - "Incluir tarefas de estilização usando Vanilla CSS e integração na camada services do frontend."
+    - "Incluir tarefas de testes automatizados: testes unitários no backend e testes de ponta a ponta (E2E) com Playwright."
+    - "Incluir tarefas de linting e formatação com Prettier/ESLint antes da entrega."
+    - "Garantir a verificação local dos testes antes de propor a conclusão das tarefas."
+testing:
+  strategy:
+    - Unit tests (NestJS services)
+    - Integration tests (API endpoints)
+    - E2E tests (Playwright frontend)
