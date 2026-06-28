@@ -1,0 +1,22 @@
+{
+  "name": "projeto-ci-cd",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "format": "prettier --check \"apps/*/src/**/*.{ts,tsx,js,jsx}\"",
+    "format:fix": "prettier --write \"apps/*/src/**/*.{ts,tsx,js,jsx}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

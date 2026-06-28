@@ -6,45 +6,42 @@ Objetivo: fornecer diretrizes operacionais concisas e executáveis para agentes 
 - Antes de agir: declare suposições e pergunte se houver ambiguidade (veja `CLAUDE.md` para estilo de execução).
 - Simplicidade: faça a menor mudança possível para cumprir a tarefa.
 - Mudanças cirúrgicas: toque apenas o necessário; remova artefatos que sua mudança gerou.
-- Critério de conclusão: só considere tarefa concluída quando os checks abaixo passarem (ex.: `pytest` retorna 0, linter retorna sem erros, build concluído).
+- Critério de conclusão: só considere tarefa concluída quando os checks abaixo passarem (`vitest run` retorna 0, `eslint .` retorna sem erros, `tsc --noEmit` sem erros, build concluído).
 
 2) Stack técnica (resumida)
-- Fonte: preencher com o conteúdo de `@docs/architecture.md` (não encontrado localmente). Estrutura esperada:
-  - Backend: linguagem, framework, runtime (ex.: Python 3.11 + FastAPI)
-  - Frontend: framework + versão (ex.: React 18)
-  - Infra: container runtime, orquestrador, banco de dados (ex.: Docker, Postgres)
-  - CI/CD: ferramentas (ex.: GitHub Actions)
+- Frontend: Next.js 16+, React 19, TypeScript (strict), Vanilla CSS, ESLint 9, Vitest
+- Backend: NestJS 11+, Prisma 7+, PostgreSQL 15+ (a ser scaffoldado)
+- Infra: Docker, Terraform (a ser scaffoldado)
+- CI/CD: GitHub Actions
+- Referência completa: `docs/architecture.md` e `openspec/config.yaml`
 
 3) Estrutura do monorepo
-- Fonte: preencher com o conteúdo de `@docs/architecture.md`.
-- Exemplo de formato a preencher:
-  - /packages/backend
-  - /packages/frontend
-  - /infra
-  - /libs/shared
+- `/apps/frontend` — Next.js 16+ (App Router, TypeScript, Vitest)
+- `/apps/backend` — NestJS 11+ (a ser scaffoldado)
+- `/infra` — Docker + Terraform (a ser scaffoldado)
+- `/openspec` — Specs e configuração do projeto
 
 4) Comandos (Commands-First)
-- Setup inicial (template — substitua conforme `@docs`):
+- Setup:
   - `git clone <REPO_URL>`
   - `cd projeto_CI_CD`
-  - `cp .env.example .env` (preencher variáveis)
-  - `./scripts/setup.sh` ou `pip install -r requirements.txt` / `npm install`
-- Build (template):
-  - Backend: `./scripts/build-backend.sh` ou `python -m build` (preencher)
-  - Frontend: `npm run build` (substituir conforme pacote)
-- Run (template):
-  - `./scripts/run.sh` ou `docker-compose up --build`
-- Setup banco de dados (template):
-  - `docker-compose up -d db`
-  - `./scripts/db/migrate.sh` ou `alembic upgrade head`
+  - `npm install`
+- Build:
+  - `npm run build` (workspace root)
+- Run:
+  - `npm run dev` (workspace root)
+- Quality:
+  - Lint: `npm run lint` (eslint .)
+  - Typecheck: `npm run typecheck` (tsc --noEmit)
+  - Test: `npm test` (vitest run)
 
 5) Regras de qualidade e testes
-- Comandos exemplares (substuir pelos reais):
-  - Lint: `ruff check . --fix --select E,W,F` ou `npm run lint`
-  - Formatação: `black .` ou `prettier --write .`
-  - Testes unitários: `pytest` ou `npm test`
+- Comandos:
+  - Lint: `npm run lint` (eslint .)
+  - Typecheck: `npm run typecheck` (tsc --noEmit)
+  - Testes unitários: `npm test` (vitest run)
 - Prioridade: 1) Testes passando, 2) Lint/format, 3) Performance/optimização.
-- Critério de `done`: executar `pytest` e `build` sem erros; se houver mudanças geradas por linters/formatters, commitar junto.
+- Critério de `done`: executar `npm test`, `npm run lint` e `npm run typecheck` sem erros.
 
 6) Governança e autonomia no terminal
 - Always do (sempre):
